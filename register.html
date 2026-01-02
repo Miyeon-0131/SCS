@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="registerFrame">
+        <div class="tempBg"></div>
+        <img src="{{ url_for('static', filename='pic/bgS.webp') }}" class="bgS" alt="" id="bg">
+        <img src="{{ url_for('static', filename='pic/bg.webp') }}" class="bg" alt="" id="bg" loading="lazy">
+        <div class="registerBox">
+            <p class="registerTitle">
+                <en>Register</en>
+                <cn>注册</cn>
+            </p>
+            <form class="registerInputForm" method="post">
+                <div class="registerInputBox">
+                    <label for="name">
+                        <small>
+                            <en>NAME</en>
+                            <cn>姓名</cn>
+                        </small>
+                        <input type="text" name="name" style="--ratio:12" placeholder="2 ≤ x ≤ 50" required>
+                    </label>
+                </div>
+                <div class="registerInputBox">
+                    <label for="division">
+                        <small>
+                            <en>DIVISION</en>
+                            <cn>部门</cn>
+                        </small>
+                        <select id="division" name="division" style="--ratio:5.5" required>
+                            <option value="" disabled selected>
+                                Choose
+                                请选择
+                            </option>
+                            <option value="Domestic">
+                                Domestic
+                                国内部
+                            </option>
+                            <option value="International">
+                                International
+                                国际部
+                            </option>
+                        </select>
+                    </label>
+                    <label for="identity">
+                        <small>
+                            <en>I AM ...</en>
+                            <cn>我是...</cn>
+                        </small>
+                        <select id="identity" name="identity" style="--ratio:5.5" required>
+                            <option value="" disabled selected>
+                                Choose
+                                请选择
+                            </option>
+                            <option value="Student">
+                                Student
+                                学生
+                            </option>
+                            <option value="Teacher">
+                                Teacher
+                                老师
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <div class="registerInputBox">
+                    <label for="gender">
+                        <small>
+                            <en>GENDER</en>
+                            <cn>性别</cn>
+                        </small>
+                        <select name="gender" style="--ratio:5.5" required>
+                            <option value="" disabled selected>
+                                Choose
+                                请选择
+                            </option>
+                            <option value="Male">
+                                Male
+                                男性
+                            </option>
+                            <option value="Female">
+                                Female
+                                女性
+                            </option>
+                            <option value="Other">
+                                Other
+                                其他
+                            </option>
+                        </select>
+                    </label>
+                    <div class="registerInputBox" style="margin-left: calc(1.5vh + 1.5vw)">
+                        <label for="grade">
+                            <small>
+                                <en>GRADE</en>
+                                <cn>年级</cn>
+                            </small>
+                            <input id="grade" type="number" name="grade" style="--ratio:2.5" required>
+                        </label>
+                        <label for="class">
+                            <small>
+                                <en>CLASS</en>
+                                <cn>班级</cn>
+                            </small>
+                            <input id="class" type="number" name="class" style="--ratio:2.5" required>
+                        </label>
+                    </div>
+                </div>
+                <div class="registerInputBox">
+                    <label for="email">
+                        <small>
+                            <en>EMAIL ADDRESS (Soong Ching Ling School Email ONLY)</en>
+                            <cn>邮箱（仅限宋校邮箱）</cn>
+                        </small>
+                        <input type="email" name="email" style="--ratio:12" placeholder="SCLS Email" required>
+                    </label>
+                </div>
+                <div class="registerInputBox">
+                    <label for="password">
+                        <small>
+                            <en>PASSWORD</en>
+                            <cn>密码</cn>
+                        </small>
+                        <input type="password" name="password" style="--ratio:5.5" placeholder="6 ≤ x ≤ 16" required>
+                    </label>
+                    <label for="confirmPassword">
+                        <small>
+                            <en>CONFIRM PASSWORD</en>
+                            <cn>确认密码</cn>
+                        </small>
+                        <input type="password" name="confirmPassword" style="--ratio:5.5" placeholder="6 ≤ x ≤ 16"
+                               required>
+                    </label>
+                </div>
+                <button type="submit" class="registerBtn" id="registerBtn">
+                    <en>SIGN UP</en>
+                    <cn>注册</cn>
+                </button>
+            </form>
+            <p class="registerError" id="registerError">{{ error|safe }}</p>
+            <hr class="registerHr">
+            <p class="registerTitle">
+                <en>Already have an account?</en>
+                <cn>已经有账号了？</cn>
+            </p>
+            <a class="registerRedirect" href="{{ url_for('login') }}">
+                <en>LOG IN</en>
+                <cn>登录</cn>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let identityElement = document.getElementById('identity');
+        let gradeNum = document.getElementById('grade');
+        let classNum = document.getElementById('class');
+        let registerBtn = document.getElementById('registerBtn');
+        const errorElement = document.getElementById("registerError");
+        let identity;
+
+        identityElement.addEventListener('change', function () {
+            identity = this.value;
+            if (identity === "Teacher") {
+                gradeNum.disabled = true;
+                gradeNum.value = 0;
+                classNum.disabled = true;
+                classNum.value = 0;
+            } else {
+                this.value = "Student";
+
+                gradeNum.disabled = false;
+                gradeNum.value = NaN;
+                classNum.disabled = false;
+                classNum.value = NaN;
+            }
+        });
+
+        document.querySelector(".registerInputForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const name = document.querySelector("input[name='name']").value.trim();
+            const division = document.querySelector("select[name='division']").value;
+            const identity = document.querySelector("select[name='identity']").value;
+            const gender = document.querySelector("select[name='gender']").value;
+            const grade = parseInt(document.getElementById("grade").value, 10);
+            const classNum = parseInt(document.getElementById("class").value, 10);
+            const email = document.querySelector("input[name='email']").value.trim();
+            const password = document.querySelector("input[name='password']").value;
+            const confirmPassword = document.querySelector("input[name='confirmPassword']").value;
+
+            if (!name || !division || !identity || !gender || !email || !password || !confirmPassword) {
+                errorElement.innerHTML = '<en>Do not leave blank!</en><cn>请完成所有表单</cn>';
+                return;
+            }
+
+            if (identity === "Student" && (isNaN(grade) || grade < 1 || grade > 12 || isNaN(classNum) || classNum < 1 || classNum > 12)) {
+                errorElement.innerHTML = '<en>Invalid grade or class number</en><cn>无效的年级或班级号码</cn>';
+                return;
+            }
+
+            if (!email.split('@')[1]?.includes("scls")) {
+                errorElement.innerHTML = '<en>Email must be SCLS Email</en><cn>邮箱必须是宋校邮箱</cn>';
+                return;
+            }
+
+            if (password.length < 6 || password.length > 16) {
+                errorElement.innerHTML = '<en>Password must be 6-16 characters</en><cn>密码长度必须在6-16位之间</cn>';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorElement.innerHTML = '<en>Passwords do not match</en><cn>密码不一致</cn>';
+                return;
+            }
+
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = "<en>Loading...</en><cn>加载中······</cn>";
+            errorElement.innerHTML = '';
+            this.submit();
+        });
+    </script>
+{% endblock %}

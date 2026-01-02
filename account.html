@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Account
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/account.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="accountBox">
+        <div class="accountInfoBox">
+            <p class="accountTitle">
+                {{ name }}</p>
+            <hr class="accountInfoHr">
+            <p class="accountInfo">
+                <en>Email:&nbsp;</en>
+                <cn>邮箱：</cn>
+                {{ email }}
+            </p>
+            <p class="accountInfo">
+                <en>Class:&nbsp;</en>
+                <cn>班级：</cn>
+                {{ classInfo }}
+            </p>
+            <p class="accountInfo">
+                <en>Gender:&nbsp;</en>
+                <cn>性别：</cn>
+                {{ gender }}
+            </p>
+            <p class="accountInfo">
+                <en>Division:&nbsp;</en>
+                <cn>部门：</cn>
+                {{ division }}
+            </p>
+            <div class="accountBtnBox">
+                <div class="accountBtn" onclick="openDelete();">
+                    <en>Delete Account</en>
+                    <cn>删除账户</cn>
+                </div>
+                <a class="accountBtn" href="{{ url_for('logout') }}">
+                    <en>Log Out</en>
+                    <cn>登出</cn>
+                </a>
+            </div>
+        </div>
+        <div class="accountOrderBox">
+            <div class="accountTitle">
+                <en>Reservation History</en>
+                <cn>预约记录</cn>
+            </div>
+            <div class="accountOrder">
+                <p style="flex:.75;">
+                    <en>Order Id</en>
+                    <cn>订单编号</cn>
+                </p>
+                <p style="flex:1;">
+                    <en>Total Amount</en>
+                    <cn>总数量</cn>
+                </p>
+                <p style="flex:1;">
+                    <en>Total Price</en>
+                    <cn>总金额</cn>
+                </p>
+                <p style="flex:.75;">
+                    <en>Claim Code</en>
+                    <cn>取件码</cn>
+                </p>
+                <p style="flex:1.5;">
+                    <en>Order State</en>
+                    <cn>订单状态</cn>
+                </p>
+                <p style="flex: 0.5;">
+                    <cn>详情</cn>
+                    <en>Detail</en>
+                </p>
+            </div>
+            {% for order in userOrder %}
+                <div class="accountOrder">
+                    <p style="flex: .75;">{{ '%03d' % order.id }}</p>
+                    <p style="flex: 1;">{{ order.totalAmount }}</p>
+                    <p style="flex: 1;">{{ order.price }}CNY</p>
+                    <p style="flex: .75;">{{ order.code }}</p>
+                    <p style="flex: 1.5;">
+                        {% if order.state == 0 %}
+                            <en>Reservation Success</en>
+                            <cn>预约成功</cn>
+                        {% elif order.state == 1 %}
+                            <en>Order Canceled</en>
+                            <cn>订单取消</cn>
+                        {% elif order.state == 2 %}
+                            <en>Transaction Success</en>
+                            <cn>交易成功</cn>
+                        {% elif order.state == 3 %}
+                            <en>Partial Delivery</en>
+                            <cn>部分发货</cn>
+                        {% endif %}
+                    </p>
+                    <p style="flex: 0.5;cursor:pointer;" onclick="more({{ order.id }})">
+                        <cn>更多</cn>
+                        <en>More</en>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="deleteUser" id="deleteUser">
+        <p class="deleteTitle">
+            <en>Are you sure to&nbsp;<span>DELETE YOUR ACCOUNT</span></en>
+            <cn>你确定要<span>删除账户</span>吗</cn>
+        </p>
+        <div class="deleteCheckboxBox">
+            <label>
+                <input type="checkbox" id="checkbox1" onclick="check()">
+            </label>
+            <p>
+                <en>&nbsp;I understand that deleting my account is a personal action. By proceeding, I acknowledge that
+                    all my data, including but not limited to orders, cart items, and personal information, will be
+                    permanently removed
+                    from the SCLS Campus Shop database. This action is irreversible and cannot be undone.
+                </en>
+                <cn>&nbsp;我明白删除我的账户是我个人的行为。在此过程中，我了解我的所有数据，包括但不限于订单、购物车物品和个人信息，将从SCLS
+                    Campus Shop数据库中永久删除。这一行动是不可逆转的，无法撤销。
+                </cn>
+            </p>
+        </div>
+        <div class="deleteCheckboxBox">
+            <label>
+                <input type="checkbox" id="checkbox2" onclick="check()">
+            </label>
+            <p>
+                <en>&nbsp;I understand that SCLS Campus Shop is not responsible for any inconvenience or loss caused by
+                    the deletion of my data. Once the account deletion is initiated, all associated data will be
+                    permanently removed, and I acknowledge that I am solely responsible for this decision.
+                </en>
+                <cn>&nbsp;我明白SCLS Campus
+                    Shop不负责因删除我的资料而造成的任何不便或损失。一旦账户被删除，所有相关数据将被永久删除，我承认我对这一决定负全部责任。
+                </cn>
+            </p>
+        </div>
+        <p class="deleteTitle" style="margin-top: auto;">
+            <en>Type "Confirm Delete" in the following box</en>
+            <cn>请在文本框内输入“确认删除”</cn>
+        </p>
+        <label>
+            <input type="text" class="deleteInput" id="deleteInput" oninput="check()">
+        </label>
+        <small>
+            <en>*Case and space required</en>
+        </small>
+        <div class="deleteBtnBox">
+            <div class="deleteBtn" onclick="closeDelete()">
+                <en>Cancel</en>
+                <cn>取消</cn>
+            </div>
+            <button class="deleteBtn" id="confirmBtn" onclick="window.location='{{ url_for('deleteUser') }}'" disabled>
+                <en>Confirm</en>
+                <cn>确认</cn>
+            </button>
+        </div>
+    </div>
+
+    <div class="orderInfoBox" id="infoBox">
+        <div class="orderInfoTwoHalf">
+            <div class="orderInfoHalf" style="margin-right: 2.5vw">
+                <p class="orderInfoId" id="infoId"></p>
+                <p class="orderInfoState" id="infoState"></p>
+                <p class="orderInfoTime" id="infoTime"></p>
+                <p class="orderInfoAmount" id="infoAmount"></p>
+                <p class="orderInfoPrice" id="infoPrice"></p>
+            </div>
+            <div class="orderInfoHalf" style="margin-left: auto">
+                <p class="orderInfoCode" id="infoCode" style="flex-direction: column"></p>
+            </div>
+        </div>
+        <hr class="orderInfoHr"/>
+        <div class="orderInfoCommodityList" id="infoList"></div>
+        <hr class="orderInfoHr"/>
+        <div class="orderInfoClose" onclick="closeInfoBox()">
+            <en>Close</en>
+            <cn>关闭</cn>
+        </div>
+    </div>
+
+    <script>
+        const deleteUser = document.getElementById('deleteUser');
+
+        function openDelete() {
+            deleteUser.style.display = "flex";
+        }
+
+        function closeDelete() {
+            deleteUser.style.display = "none";
+        }
+
+        function check() {
+            const checkbox1 = document.getElementById('checkbox1').checked;
+            const checkbox2 = document.getElementById('checkbox2').checked;
+            const deleteInput = document.getElementById('deleteInput').value;
+            const confirmBtn = document.getElementById('confirmBtn');
+
+            if (checkbox1 && checkbox2 && (deleteInput === "Confirm Delete" || deleteInput === "确认删除")) {
+                confirmBtn.removeAttribute('disabled');
+            } else {
+                confirmBtn.setAttribute('disabled', 'true');
+            }
+        }
+
+        const infoBoxE = document.getElementById('infoBox');
+        const idE = document.getElementById('infoId');
+        const amountE = document.getElementById('infoAmount');
+        const priceE = document.getElementById('infoPrice');
+        const codeE = document.getElementById('infoCode');
+        const stateE = document.getElementById('infoState');
+        const timeE = document.getElementById('infoTime');
+        const listE = document.getElementById('infoList');
+
+        function more(orderId) {
+            const url = `{{ url_for('getOrder', id='') }}${orderId}`;
+
+            infoBoxE.style.display = 'flex';
+            idE.innerHTML = '';
+            amountE.innerHTML = '';
+            priceE.innerHTML = '';
+            codeE.innerHTML = '';
+            stateE.innerHTML = '';
+            timeE.innerHTML = '';
+            listE.innerHTML = '<en>Loading...</en><cn>加载中······</cn>';
+
+            fetch(url, {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    idE.innerHTML = '<en>Order Id:&nbsp;</en><cn>订单编号：</cn>' + orderId;
+                    amountE.innerHTML = '<en>Total Amount:&nbsp;</en><cn>总数量：</cn>' + data.totalAmount;
+                    priceE.innerHTML = '<en>Total Price:&nbsp;</en><cn>总金额：</cn>' + data.price + 'CNY';
+                    codeE.innerHTML = '<en>Claim Code</en><cn>取件码</cn><span>' + data.code + '</span>';
+                    timeE.innerHTML = '<en>Submit Time:&nbsp;</en><cn>创建时间：</cn>' + data.time;
+
+                    let stateCode = data.state;
+                    if (stateCode === 0) {
+                        stateE.innerHTML = '<en>Order State:&nbsp;</en><cn>订单状态：</cn><en>Reservation Success</en><cn>预约成功</cn>';
+                    } else if (stateCode === 1) {
+                        stateE.innerHTML = '<en>Order State:&nbsp;</en><cn>订单状态：</cn><en>Order Canceled</en><cn>订单取消</cn>';
+                    } else if (stateCode === 2) {
+                        stateE.innerHTML = '<en>Order State:&nbsp;</en><cn>订单状态：</cn><en>Transaction Success</en><cn>交易成功</cn>';
+                    } else if (stateCode === 3) {
+                        stateE.innerHTML = '<en>Order State:&nbsp;</en><cn>订单状态：</cn><en>Partial Delivery</en><cn>部分发货</cn>';
+                    } else {
+                        stateE.innerHTML = '<en>Order State:&nbsp;</en><cn>订单状态：</cn><en>No Record</en><cn>无记录</cn>';
+                    }
+
+                    listE.innerHTML = '';
+                    data.carts.forEach(item => {
+                        listE.innerHTML += `<div class="orderInfoCommodityUnit" onclick="goDetail(${item[2]})"><div>${item[0]}</div><div>${item[1]}</div></div>`;
+                    });
+                })
+                .catch(() => {
+                    announce('<en>An unexpected error occurred</en><cn>发生意外错误</cn>');
+                });
+        }
+
+        function closeInfoBox() {
+            infoBoxE.style.display = 'none';
+        }
+
+        function goDetail(commodityId) {
+            window.location = '{{ url_for('commodityDetail', commodityId='') }}' + commodityId;
+        }
+    </script>
+{% endblock %}

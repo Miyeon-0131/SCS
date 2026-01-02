@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}
+    About Us
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/subNavbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aboutUs.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="subNavbarContainer">
+        <div class="subNavbarLeftBox">
+            <a class="subNavbarTitle" id="Apparel" href="{{ url_for('tagApparel') }}">
+                <en>Apparel</en>
+                <cn>服饰</cn>
+            </a>
+            <a class="subNavbarTitle" id="Stationery" href="{{ url_for('tagStationery') }}">
+                <en>Stationery</en>
+                <cn>文具</cn>
+            </a>
+            <a class="subNavbarTitle" id="DailyUse" href="{{ url_for('tagDailyUse') }}">
+                <en>Daily Use</en>
+                <cn>日用品</cn>
+            </a>
+            <a class="subNavbarTitle" id="Sports" href="{{ url_for('tagSports') }}">
+                <en>Sports</en>
+                <cn>运动</cn>
+            </a>
+            <a class="subNavbarTitle" id="Gift" href="{{ url_for('tagGift') }}">
+                <en>Gift</en>
+                <cn>礼品</cn>
+            </a>
+            <a class="subNavbarTitle" id="About" href="{{ url_for('aboutUs') }}">
+                <en>About Us</en>
+                <cn>关于我们</cn>
+            </a>
+        </div>
+        <div class="subNavbarRightBox">
+            <a class="subNavbarTitle" onclick="history.back();">
+                <en>Back</en>
+                <cn>返回</cn>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const tagElement = document.getElementById("About");
+        if (tagElement) {
+            tagElement.style.textDecoration = "underline 2px solid #174d3d";
+        }
+    </script>
+
+    <div class="firstPicBlock">
+        <div class="firstPicBox">
+            <img class="firstPicS" alt="" src="{{ url_for('static', filename='pic/commodity/giftS.webp') }}" id="bg">
+            <img class="firstPic" alt="" src="{{ url_for('static', filename='pic/commodity/gift.webp') }}" id="bg">
+        </div>
+        <div class="firstContent">
+            <p>
+                <en>To Share&nbsp;<span>Creativity</span>,</en>
+                <cn>弘扬校风；</cn>
+            </p>
+            <p>
+                <en>To Inspire&nbsp;<span>SCLS Pride</span>,</en>
+                <cn>激发创新；</cn>
+            </p>
+            <p>
+                <en>To Foster&nbsp;<span>Community</span>.</en>
+                <cn>泽被四方。</cn>
+            </p>
+        </div>
+    </div>
+    <div class="titleBlock"></div>
+    <div class="titleBlock">
+        <en>Where the Proceeds Go?</en>
+        <cn>收益去向</cn>
+    </div>
+    <div class="contentBlock">
+        <en>
+            Our efforts are dedicated to supporting others. After covering the essential expenses required to operate
+            the shop, 100% of our proceeds are donated to meaningful causes, ensuring that every purchase helps create a
+            positive impact beyond our school community.
+        </en>
+        <cn>
+            我们的努力旨在支持他人。收益中的一部分用于保证商店基本运行，剩下的所有收益100%将捐赠给有意义的公益事业，确保每一笔消费都能为我们学校社区以外的社会产生积极影响。
+        </cn>
+        <br>
+        <en>
+            Every six months, we will publicly disclose the income and expenditure records on our website, along with
+            the allocation of the proceeds. Once our partner organization is confirmed, the name of the charity will be
+            announced on the website.
+        </en>
+        <cn>
+            每半年我们将在网站上公布半年的收支记录，以及所得收益的去向。合作机构确定后，我们会将机构名称在网站上公布。
+        </cn>
+    </div>
+    <div class="titleBlock">
+        <en>How to Buy?</en>
+        <cn>如何购买</cn>
+    </div>
+    <div class="contentBlock">
+        <en>
+            This website only supports pre-orders, with transactions occurring every Friday at noon during the semester.
+            The product redemption booth is located on the 1st floor of the Domestic Division High School and Middle School Building and is open every Friday from 12:30 to 12:55, accepting cash, WeChat Pay, and Alipay.
+        </en>
+        <cn>
+            本网站仅支持预订，交易时间为学期中每周五中午。产品兑换柜台位于中国部中学教学楼1楼，开放时间为每周五12:30到12:55，接受现金、微信支付和支付宝。
+        </cn>
+        <br>
+        <en>
+            All pre-ordered items will be reserved for two weeks. If unclaimed within this period, the order will be
+            automatically canceled. For special circumstances, please contact us. <span>Purchases are limited to current students and staff; account registration requires a school email.</span>
+        </en>
+        <cn>
+            所有预订商品将保留两周。如果在此期限内未领取，订单将自动取消。如有特殊情况，请联系我们。<span>购买仅限在校学生和教职人员。预订需使用学校邮箱。</span>
+        </cn>
+        <br>
+        <en>
+            <span>* All products are currently pre-sale and can be pre-ordered on the official website. The first transaction will take place on December 27th, the Winter Solstice Festival and all clothing products will be delivered in January.</span>
+        </en>
+        <cn>
+            <span>所有产品均在预售阶段，可在官网先行预定。首次交易将于12月27日冬至日进行，所有服装类产品一月交付。</span>
+        </cn>
+        <br>
+    </div>
+    <div class="titleBlock"></div>
+    <div class="secondPicBlock">
+        <img class="secondPicS" alt="" src="{{ url_for('static', filename='pic/commodity/secPicS.png') }}" id="bg">
+        <img class="secondPic" alt="" src="{{ url_for('static', filename='pic/commodity/secPic.png') }}" id="bg">
+    </div>
+    <div class="titleBlock"></div>
+    <div class="secondTitle">
+        <en>Meet our team!</en>
+        <cn>认识我们的团队！</cn>
+    </div>
+    <div class="secondContentBlock">
+        <en>
+            <span>SCS is part of ArteZone XiaYa Club under the Domestic Division High School Student Council Clubs Department.</span>
+        </en>
+        <cn>
+            <span>SCS隶属于中国部高中学生会社团部ArteZone小雅社，主要负责人员为：</span>
+        </cn>
+        <br>
+        <div class="thirdPicBlock">
+            <div class="thirdPicHalf">
+                <en><span>The main organizers are:</span></en>
+                <cn><span>主要成员有：</span></cn>
+                <en>Amanda (Liting YU) - Design</en>
+                <cn>郁立婷 - 设计</cn>
+                <en>Henry (Qixin Zhu) - Web Development</en>
+                <cn>朱启新 - 网页开发</cn>
+                <en>Linda (Fangting Ling) - Marketing</en>
+                <cn>林芳婷 - 市场推广</cn>
+                <en>Tony (Kaikun Chen) - Accounting</en>
+                <cn>陈楷焜 - 财务</cn>
+                <br>
+                <en><span>Other Members:</span></en>
+                <cn><span>其他成员：</span></cn>
+                <en>Jiajia Lyu, Weide Dai, Xinyi Wang, Zitong Huang</en>
+                <cn>吕珈珈，戴惟德，王心怡，黄梓童</cn>
+                <small>
+                    <en>*Names are listed in alphabetical order and have no other significance.</en>
+                    <cn>*名称按字母顺序排列，没有其他意义</cn>
+                </small>
+            </div>
+            <div class="thirdPicHalf">
+                <div class="thirdPicBox">
+                    <img class="thirdPicS" alt="" src="{{ url_for('static', filename='pic/commodity/thirdPicS.png') }}"
+                         id="bg">
+                    <img class="thirdPic" alt="" src="{{ url_for('static', filename='pic/commodity/thirdPic.png') }}"
+                         id="bg">
+                </div>
+            </div>
+        </div>
+        <br>
+        <label>
+            <span>
+            <en>Please note that all operations and decisions are student-led, with full supervision by high school teachers from the Domestic Division.</en>
+            <cn>所有的运营与决策均由学生主导，中国部高中老师全程监督。</cn>
+            <br>
+            <en>Sponsor Teachers:</en>
+            <cn>审核员：</cn>
+            <en>Liu Wei (DDHS Teacher), Yuan Yue (DDHS Teacher)</en>
+            <cn>刘薇（中部高中教师） 袁月（中部高中教师）</cn>
+                <br>
+            </span>
+        </label>
+    </div>
+    <div class="titleBlock"></div>
+    <div class="footerContentBlock">
+        <en>Thank you for supporting SCS.</en>
+        <cn>感谢您支持 SCS！</cn>
+        <en>Together, we build a&nbsp;<span>stronger</span>,</en>
+        <cn>让我们携手共建一个<span>更强大</span></cn>
+        <en>more&nbsp;<span>connected</span>&nbsp;community!</en>
+        <cn><span>更紧密</span>的社区！</cn>
+    </div>
+{% endblock %}

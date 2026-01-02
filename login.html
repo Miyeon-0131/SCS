@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="registerFrame">
+        <div class="tempBg"></div>
+        <img src="{{ url_for('static', filename='pic/bgS.webp') }}" class="bgS" alt="" id="bg">
+        <img src="{{ url_for('static', filename='pic/bg.webp') }}" class="bg" alt="" id="bg" loading="lazy">
+        <div class="registerBox" style="height: 70%">
+            <p class="registerTitle">
+                <en>Login</en>
+                <cn>登录</cn>
+            </p>
+            <form class="registerInputForm" method="post" onsubmit="login()">
+                <div class="registerInputBox">
+                    <label for="email">
+                        <small>
+                            <en>EMAIL ADDRESS</en>
+                            <cn>邮箱</cn>
+                        </small>
+                        <input type="email" name="email" style="--ratio:12" required>
+                    </label>
+                </div>
+                <div class="registerInputBox">
+                    <label for="password">
+                        <small>
+                            <en>PASSWORD</en>
+                            <cn>密码</cn>
+                        </small>
+                        <input type="password" name="password" style="--ratio:12" required>
+                    </label>
+                </div>
+                <button type="submit" class="registerBtn" id="loginBtn">
+                    <en>LOGIN</en>
+                    <cn>登录</cn>
+                </button>
+            </form>
+            <p class="registerError">{{ error|safe }}</p>
+            <hr class="registerHr">
+            <p class="registerTitle">
+                <en>Don't have an account?</en>
+                <cn>没有账户?</cn>
+            </p>
+            <a class="registerRedirect" href="{{ url_for('register') }}">
+                <en>SIGN UP</en>
+                <cn>注册</cn>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let loginBtn = document.getElementById('loginBtn');
+
+        function login() {
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = "<en>Loading...</en><cn>加载中······</cn>";
+        }
+    </script>
+{% endblock %}

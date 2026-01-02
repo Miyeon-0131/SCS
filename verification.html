@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Verification
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/verification.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="verificationFrame">
+        <div class="tempBg"></div>
+        <img src="{{ url_for('static', filename='pic/bgS.webp') }}" class="bgS" alt="" id="bg">
+        <img src="{{ url_for('static', filename='pic/bg.webp') }}" class="bg" alt="" id="bg" loading="lazy">
+        <div class="verificationBox">
+            <p class="verificationTitle">
+                <en>We have sent an email with verification code to {{ email }} (Recommended Web Version of the Email)
+                </en>
+                <cn>已发送验证码邮件至{{ email }} （推荐使用网页版邮箱）</cn>
+            </p>
+            <p class="verificationSubtitle">
+                <en>
+                    Please enter the verification code (6-digit combination of numbers and letters, case-sensitive) in
+                    the following box. If you do`not get one, please back to the register page and try again. If you
+                    still have problems, please contact us!
+                </en>
+                <cn>
+                    请在输入框中输入验证码（6位的数字与字母组合，区分大小写）。如果你没有收到邮件，请在登录页面重试。如果依旧有问题，请联系我们！
+                </cn>
+            </p>
+            <label>
+                <input maxlength="6" minlength="6" type="text" class="verificationInput" id="verifyInput">
+            </label>
+            <button class="verificationSubmit" id="verifyBtn" onclick="goVerify()">
+                <en>Submit</en>
+                <cn>提交</cn>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const verifyInput = document.getElementById('verifyInput');
+        const verifyBtn = document.getElementById('verifyBtn');
+        verifyInput.addEventListener('input', function () {
+            verifyBtn.disabled = verifyInput.value.length !== 6;
+        })
+
+        verifyBtn.disabled = true;
+
+        function goVerify() {
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = "<en>Loading...</en><cn>加载中······</cn>";
+            window.location = '{{ url_for('emailVerify') }}' + `?email={{ email }}&code=${verifyInput.value}`;
+        }
+    </script>
+{% endblock %}

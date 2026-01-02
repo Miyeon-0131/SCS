@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Update History
+{% endblock %}
+
+{% block content %}
+        <style>
+        .timeline-container {
+            margin: 10vh auto 0 auto;
+            width: 100vw;
+            padding: calc(2vh + 2vw);
+            background-color: white;
+        }
+        .timeline {
+            list-style-type: none;
+        }
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            border-radius: 3px;
+            background: #e7b852;
+        }
+        .timeline-item {
+            margin-bottom: calc(1vh + 1vw);
+            position: relative;
+        }
+
+        .timeline-item .content {
+            margin-left: calc(.5vh + .5vw);
+        }
+        .timeline-item .timestamp {
+            font-size: calc(.75vh + .75vw);
+            color: #666;
+        }
+        .timeline-item .title {
+            font-size: calc(1.5vh + 1.5vw);
+            margin: 5px 0;
+        }
+        .timeline-item .description {
+            font-size: calc(1vh + 1vw);
+            color: #555;
+        }
+    </style>
+    <div class="timeline-container">
+        <ul class="timeline" id="timeline">Loading</ul>
+    </div>
+    <script>
+        window.onload = function () {
+            fetch('{{ url_for('getUpdateHistory') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const timeline = document.querySelector('#timeline');
+                    timeline.innerHTML = '';
+                    data.forEach(update => {
+                        const item = `
+                            <li class="timeline-item">
+                                <div class="content">
+                                    <div class="timestamp">${update.timestamp}+8</div>
+                                    <div class="title">${update.title}</div>
+                                    <div class="description">${update.description}</div>
+                                </div>
+                            </li>
+                        `;
+                        timeline.innerHTML+=item;
+                    });
+                });
+        }
+    </script>
+{% endblock %}

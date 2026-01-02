@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Tag
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tag.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="tagScrollBox" id="tagScrollBox">
+        <div class="tagScrollInnerBox" id="tagScrollInnerBox">
+            <div class="tagTitleBox">
+                <div class="tagTitle">
+                    Unleash<br>
+                    Your SCLS<br>
+                    Spirit in<br>
+                    Style.
+                </div>
+                <div class="tagSubtitle">
+                    <en>Welcome to SCLS</en>
+                    <cn>欢迎来到宋校</cn>
+                    <br>
+                    <en>Student-Run Campus Shop</en>
+                    <cn>文创商品店</cn>
+                </div>
+            </div>
+            <div class="tagTagBox">
+                <div class="tagBlock" onclick="window.location='{{ url_for('aboutUs') }}'">
+                    <img src="{{ url_for('static', filename="pic/commodity/aboutUsS.webp") }}" class="tagPicS" alt="" id="bg">
+                    <img src="{{ url_for('static', filename="pic/commodity/aboutUs.webp") }}" class="tagPic" alt="" id="bg" loading="lazy">
+                    <div class="tagTagBg"></div>
+                    <p class="tagTagTitle">
+                        <en>About Us</en>
+                        <cn>关于我们</cn>
+                    </p>
+                </div>
+                <div class="tagBlock" onclick="window.location = '{{ url_for('tagApparel') }}'">
+                    <img src="{{ url_for('static', filename="pic/commodity/apparelS.webp") }}" class="tagPicS" alt="" id="bg">
+                    <img src="{{ url_for('static', filename="pic/commodity/apparel.webp") }}" class="tagPic" alt="" id="bg" loading="lazy">
+                    <div class="tagTagBg"></div>
+                    <p class="tagTagTitle">
+                        <en>Apparel</en>
+                        <cn>服饰</cn>
+                    </p>
+                </div>
+                <div class="tagBlock" onclick="window.location='{{ url_for('tagStationery') }}'">
+                    <img src="{{ url_for('static', filename="pic/commodity/stationeryS.webp") }}" class="tagPicS" alt="" id="bg">
+                    <img src="{{ url_for('static', filename="pic/commodity/stationery.webp") }}" class="tagPic" alt="" id="bg" loading="lazy">
+                    <div class="tagTagBg"></div>
+                    <p class="tagTagTitle">
+                        <en>Stationery</en>
+                        <cn>文具</cn>
+                    </p>
+                </div>
+                <div class="tagBlock" onclick="window.location='{{ url_for('tagGift') }}'">
+                    <img src="{{ url_for('static', filename="pic/commodity/giftS.webp") }}" class="tagPicS" alt="" id="bg">
+                    <img src="{{ url_for('static', filename="pic/commodity/gift.webp") }}" class="tagPic" alt="" id="bg" loading="lazy">
+                    <div class="tagTagBg"></div>
+                    <p class="tagTagTitle">
+                        <en>Gift</en>
+                        <cn>礼品</cn>
+                    </p>
+                </div>
+                <div class="tagBlock" onclick="window.location='{{ url_for('tagDailyUse') }}'">
+                    <img src="{{ url_for('static', filename="pic/commodity/dailyUseS.webp") }}" class="tagPicS" alt="" id="bg">
+                    <img src="{{ url_for('static', filename="pic/commodity/dailyUse.webp") }}" class="tagPic" alt="" id="bg" loading="lazy">
+                    <div class="tagTagBg"></div>
+                    <p class="tagTagTitle">
+                        <en>Daily Use</en>
+                        <cn>日用品</cn>
+                    </p>
+                </div>
+                <div class="tagBlock" onclick="window.location='{{ url_for('tagSports') }}'">
+                    <img src="{{ url_for('static', filename="pic/commodity/sportsS.webp") }}" class="tagPicS" alt="" id="bg">
+                    <img src="{{ url_for('static', filename="pic/commodity/sports.webp") }}" class="tagPic" alt="" id="bg" loading="lazy">
+                    <div class="tagTagBg"></div>
+                    <p class="tagTagTitle">
+                        <en>Sports</en>
+                        <cn>运动</cn>
+                    </p>
+                </div>
+            </div>
+            <div class="tagBarBox" id="tagBarBox">
+                <div class="tagBarTitle">
+                    <en>Scroll for more</en>
+                    <cn>滚动查看更多</cn>
+                </div>
+                <div class="tagBarLineBox">
+                    <div class="tagBarLine" id="tagBarLine"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tagBarLine = document.getElementById('tagBarLine');
+        const tagBarBox = document.getElementById('tagBarBox');
+        const base = 1.75;
+        let lastX = 0;
+        let lastY = 0;
+
+        function updateMove() {
+            if (getAspectRatio() > 1) {
+                const thisX = window.scrollX;
+                const thisY = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const windowWidth = window.innerWidth;
+
+                const tagScrollMax = base * windowWidth;
+                if (thisX !== lastX) {
+                    const viewportWidth = windowWidth + thisX;
+                    let movePercent = 1 - (tagScrollMax - viewportWidth) / (tagScrollMax - windowWidth);
+                    const moveValue = movePercent * (base * windowWidth - windowHeight);
+                    tagBarLine.style.setProperty('--percent', `${movePercent}`);
+                    window.scrollTo(thisX, moveValue);
+                } else if (thisY !== lastY) {
+                    const viewportHeight = windowHeight + thisY;
+                    let movePercent = 1 - (tagScrollMax - viewportHeight) / (tagScrollMax - windowHeight);
+                    /*
+                    if (movePercent > 1) {
+                        movePercent = 1
+                        tagBarBox.style.opacity = '0';
+                    } else {
+                        tagBarBox.style.opacity = '1';
+                    }
+                    */
+                    const moveValue = movePercent * ((base - 1) * windowWidth);
+                    tagBarLine.style.setProperty('--percent', `${movePercent}`);
+                    document.body.style.setProperty('--move', `${moveValue}px`);
+                    window.scrollTo(moveValue, thisY);
+                }
+
+                lastX = window.scrollX;
+                lastY = window.scrollY;
+            } else {
+                window.location = "{{ url_for('tagApparel') }}";
+            }
+        }
+
+        updateMove()
+        window.addEventListener('resize', updateMove);
+        window.addEventListener('scroll', updateMove);
+    </script>
+{% endblock %}

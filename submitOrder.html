@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}
+    CommodityDetail
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/submitOrder.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="orderBox">
+        <div class="commodityInfoBox">
+            <p class="orderTitle">
+                <cn>预定信息</cn>
+                <en>Reservation Info</en>
+            </p>
+            <div class="orderCommodityList">
+                <div class="orderCommodityBox">
+                    <p class="orderCommodityName">
+                        <cn>商品名</cn>
+                        <en>Name</en>
+                    </p>
+                    <p class="orderCommodityOption">
+                        <cn>类型</cn>
+                        <en>Option</en>
+                    </p>
+                    <p class="orderCommodityAmount"><span><en>Amount</en><cn>数量</cn></span></p>
+                    <p class="orderCommodityPrice">
+                        <en>Price</en>
+                        <cn>金额</cn>
+                    </p>
+                </div>
+                {% for cart in orderList %}
+                    <div class="orderCommodityBox" data-canOrder="{{ cart[4] }}">
+                        <p class="orderCommodityName">{{ cart[0]|safe }}</p>
+                        <p class="orderCommodityOption">{{ cart[1]|safe }}</p>
+                        <p class="orderCommodityAmount"><span>{{ cart[2] }}</span></p>
+                        <p class="orderCommodityPrice">{{ cart[3] }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <hr class="orderHr">
+            <div class="totalBox">
+                <p class="orderInfo">
+                    <cn>总计</cn>
+                    <en>Total</en>
+                </p>
+                <p class="orderInfo" style="flex-direction: row;display: flex">
+                    {{ totalAmount }}<cn>件</cn><en>&nbsp;piece(s)</en>&nbsp;&nbsp;&nbsp;{{ totalPrice }}CNY
+                </p>
+            </div>
+            <hr class="orderHr">
+        </div>
+        <form class="userInfoBox" method="POST" onsubmit="handleBtnClick()">
+            <p class="orderTitle">
+                <en>Personal Info</en>
+                <cn>预定人信息</cn>
+            </p>
+            <hr class="orderHr">
+            <div class="orderInfo">
+                <p><br/></p>
+                <p>
+                    <en>Name:&nbsp;</en>
+                    <cn>姓名：</cn>
+                    {{ name }}
+                </p>
+                <p>
+                    <en>Class:&nbsp;</en>
+                    <cn>班级：</cn>
+                    {{ classInfo }}
+                </p>
+                <p>
+                    <en>Email:&nbsp;</en>
+                    <cn>邮箱：</cn>
+                    {{ email }}
+                </p>
+                <p>
+                    <en>Division:&nbsp;</en>
+                    <cn>部门：</cn>
+                    {{ division }}
+                </p>
+                <p><br/></p>
+            </div>
+            <hr class="orderHr">
+            <p class="orderInfo">
+                <br/>
+                <en>Please confirm the info.</en>
+                <cn>请确认您的预定信息和个人信息。</cn>
+                <br/>
+                <en>The goods exchange booth is open every Fri, 12:30-12:55. Cash, WeChat and Alipay are
+                    supported.
+                </en>
+                <cn>商品兑换摊位每周五中午12:30-12:55开放，支持现金、微信、支付宝支付。</cn>
+                <br/>
+                {% if canSubmit %}
+                    <en>Reserved goods will be reserved for two weeks, or they will be cancelled. Please contact us in
+                        case of special circumstances:
+                    </en>
+                    <cn>所有预定商品为您保留两周，两周内未取则自动取消预定， 若有特殊情况请联系：</cn>
+                    <a href="mailto:help@sclscampus.shop">help@sclscampus.shop</a>
+                {% else %}
+                    <span style="color: #ff8888">
+                        <en>Some product information has changed, the selected product is out of stock. The order generation has failed.</en>
+                        <cn>部分商品信息出现了变动，所选商品缺货或下架，订单生成失败。</cn>
+                    </span>
+                {% endif %}
+            </p>
+            <div class="orderBtnBox">
+                <a class="cancelBtn" onclick="handleBtnClick(); window.location = '{{ url_for('tag') }}'">
+                    <en>Cancel</en><cn>取消</cn>
+                </a>
+                {% if canSubmit %}
+                    <button type="submit" class="orderBtn">
+                        <en>Confirm</en><cn>确定</cn>
+                    </button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("cart").removeEventListener("click", openCart);
+        document.getElementById("cart").addEventListener("click", function () {
+            announce("<en>Please finish your current order.</en><cn>请先完成当前订单！</cn>");
+        });
+
+        function handleBtnClick() {
+            document.getElementById("waitingSubmit").classList.add('visibleWaitingSubmit');
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/countDown.css') }}">
+    <link rel="preload" as="image" href="{{ url_for('static', filename='pic/bgS.webp') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="countdownBox" id="countdownBox">
+        <div class="countdownContainer">
+            <div class="countdownTitle">
+                <en>Countdown to Opening Date</en>
+                <cn>正式开店倒计时</cn>
+            </div>
+            <div class="countdownSubtitle">
+                <en>December 23, 2024, 18:00 AM (GMT+8)</en>
+                <cn>2024年12月23日18:00（东八区）</cn>
+            </div>
+            <div class="countdownCountdown" id="countdown">
+                <span>7</span><span class="unit"><en>Days</en><cn>天</cn></span>
+                <span>24</span><span class="unit"><en>Hours</en><cn>时</cn></span>
+                <span>00</span><span class="unit"><en>Minutes</en><cn>分</cn></span>
+                <span>00</span><span class="unit"><en>Seconds</en><cn>秒</cn></span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const targetDate = new Date("2024-12-23T18:00:00+08:00");
+        const endDate = new Date(targetDate);
+        endDate.setDate(endDate.getDate() + 1);
+        let interval;
+
+        function updateCountdown() {
+            const now = new Date();
+            const timeDifference = targetDate - now;
+
+            if (timeDifference <= 0) {
+                document.getElementById("countdown").innerHTML = "<span><en>We're officially open!</en><cn>我们正式开店了！</cn></span>";
+                clearInterval(interval);
+                return;
+            }
+
+            document.getElementById("countdown").innerHTML =
+                `<span>${Math.floor(timeDifference / (1000 * 60 * 60 * 24))}</span><span class="unit"><en>Days</en><cn>天</cn></span>` +
+                `<span>${Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}</span><span class="unit"><en>Hours</en><cn>时</cn></span>` +
+                `<span>${Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))}</span><span class="unit"><en>Minutes</en><cn>分</cn></span>` +
+                `<span>${Math.floor((timeDifference % (1000 * 60)) / 1000)}</span><span class="unit"><en>Seconds</en><cn>秒</cn></span>`;
+        }
+
+        if (new Date() < endDate) {
+            updateCountdown();
+            interval = setInterval(updateCountdown, 1000);
+        } else {
+            const countdownBox = document.getElementById("countdownBox");
+            if (countdownBox) {
+                countdownBox.remove();
+            }
+        }
+    </script>
+
+    <div class="homeContainer">
+        <div class="tempBg"></div>
+        <img src="{{ url_for('static', filename='pic/bgS.webp') }}" class="bgS" alt="" id="bg">
+        <img src="{{ url_for('static', filename='pic/bg.webp') }}" class="bg" alt="" id="bg" loading="lazy">
+        <div class="homeTitleBox">
+            <p class="homeTitle">
+                <en>SCLS Campus Shop</en>
+                <cn>欢 迎 光 临</cn>
+            </p>
+            <p class="homeSubtitle">
+                <en>SCLS Student-Run Campus Shop</en>
+                <cn>宋校文创商品店</cn>
+            </p>
+            <a class="homeBtn" href="{{ url_for('tag') }}">
+                <en>Shop Now</en>
+                <cn>开始购物</cn>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function isChromeBrowser() {
+            const test = regexp => {
+                return regexp.test(navigator.userAgent);
+            };
+
+            if (test(/opr\//i)) {
+                return false;//'Opera';
+            } else if (test(/edg/i)) {
+                return true;//'Microsoft Edge';
+            } else if (test(/chrome|chromium|crios/i)) {
+                return true;//'Google Chrome';
+            } else if (test(/firefox|fxios/i)) {
+                return false;//'Mozilla Firefox';
+            } else if (test(/safari/i)) {
+                return false;//'Apple Safari';
+            } else if (test(/trident/i)) {
+                return false;//'Microsoft Internet Explorer';
+            } else if (test(/ucbrowser/i)) {
+                return false;//'UC Browser';
+            } else if (test(/samsungbrowser/i)) {
+                return false;//'Samsung Browser';
+            } else {
+                return false;//'Unknown browser';
+            }
+        }
+
+        if (!isChromeBrowser()) {
+            announce('<en>Chrome-based browser like Edge and Chrome is recommended.</en><cn>推荐使用Chrome-based浏览器（Edge，Chrome等）</cn>', "#f16a5f", 7.5)
+        }
+    </script>
+{% endblock %}

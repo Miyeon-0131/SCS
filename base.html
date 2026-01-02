@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SCLS Campus Shop - {% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SCLS Official Student-run Campus Shop. Unleash Your SCLS Spirit in Style!">
+    <meta name="keywords" content="SCLS, Campus Shop, Student-run">
+    <meta property="og:title" content="SCLS Campus Shop">
+    <meta property="og:description" content="Unleash Your SCLS Spirit in Style!">
+    <meta property="og:image" content="{{ url_for('static',filename='pic/share.png') }}">
+    <meta property="og:url" content="{{ url_for('home') }}">
+    <link rel="preload" href="{{ url_for('static', filename='font/regular.woff2') }}" as="font" type="font/woff2"
+          crossorigin="anonymous">
+    <script rel="preload" src="{{ url_for('static', filename='js/html.js') }}"></script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='pic/logoGreen.svg') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cart.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loader.css') }}">
+    {% block head %}{% endblock %}
+</head>
+
+<body data-lang="en">
+<div class="errorContainer">
+    <p class="errorText">Error</p>
+</div>
+
+<div id="cookieBanner" style="display: none;">
+    <div>
+        <en>
+            <p>
+                SCLS Campus Shop use cookies to enhance your browsing experience. This website only uses essential
+                cookies
+                that are necessary for the website to function properly. By clicking "Accept", you consent to the use of
+                these cookies. More information can be found in our <a
+                    href="{{ url_for('privacyPolicy') }}">Privacy Policy</a> and <a href="{{ url_for('termsOfUse') }}">Terms
+                of Use</a>.
+            </p>
+        </en>
+        <cn>
+            <p>SCLS Campus Shop使用Cookie来提升您的浏览体验。该网站仅使用必要的Cookie，这些Cookie对于网站的正常运行是必不可少的。点击“接受”即表示您同意使用这些Cookie。
+            </p>
+        </cn>
+        <en>
+            If you do not accept this use, you cannot use this webpage.
+        </en>
+        <cn>我们只使用cookie记录登录状态。如果您不接受此用途，则无法使用此网页。</cn>
+    </div>
+    <button id="accept-btn">
+        <en>Accept</en>
+        <cn>接受</cn>
+    </button>
+
+    <script>
+        window.onload = function () {
+            const consent = getCookie("cookieConsent");
+            if (!consent) {
+                document.getElementById("cookieBanner").style.display = "flex";
+            }
+        };
+
+        document.getElementById("accept-btn").onclick = function () {
+            setCookie("cookieConsent", "accepted", 365);
+            document.getElementById("cookieBanner").style.display = "none";
+        };
+
+        /*
+        document.addEventListener('copy', function (event) {
+            const clipboardData = event.clipboardData || window.clipboardData;
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                clipboardData.setData('text/plain', clipboardData.getData('text/plain') + "SCLS Campus Shop");
+            } else {
+                event.preventDefault();
+                clipboardData.setData('text/plain', "SCLS Campus Shop");
+            }
+        });
+
+        document.addEventListener('cut', function (event) {
+            const clipboardData = event.clipboardData || window.clipboardData;
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                clipboardData.setData('text/plain', clipboardData.getData('text/plain') + "SCLS Campus Shop");
+            } else {
+                event.preventDefault();
+                clipboardData.setData('text/plain', "SCLS Campus Shop");
+            }
+        });
+        */
+    </script>
+</div>
+
+<div id="menu" class="context-menu">
+    <ul>
+        <hr style="--text: 'Website Page';"/>
+        <li onclick="switchLanguage()">
+            <en>切换至中文</en>
+            <cn>Switch Language to English</cn>
+        </li>
+        <li onclick="location.reload();">
+            <en>Reload</en>
+            <cn>刷新</cn>
+        </li>
+        <li onclick="openNewWindow()">
+            <en>Open In New Window</en>
+            <cn>在新的页面中打开</cn>
+        </li>
+        <hr style="--text: 'Website Map';"/>
+        <li onclick="window.location.href='{{ url_for('home') }}';">
+            <en>Home Page</en>
+            <cn>主页</cn>
+        </li>
+        <li class="submenu" id="submenu">
+            <p onclick="window.location.href='{{ url_for('tag') }}';">
+                <en>Tags&nbsp;&#8680;</en>
+                <cn>标签&nbsp;&#8680;</cn>
+            </p>
+            <ul class="submenu-items" id="submenu-items">
+                <li onclick="window.location.href='{{ url_for('tag') }}';">
+                    <en>Tags Page</en>
+                    <cn>标签页</cn>
+                </li>
+                <li onclick="window.location.href='{{ url_for('tagApparel') }}';">
+                    <en>Apparel</en>
+                    <cn>服饰</cn>
+                </li>
+                <li onclick="window.location.href='{{ url_for('tagStationery') }}';">
+                    <en>Stationery</en>
+                    <cn>文具</cn>
+                </li>
+                <li onclick="window.location.href='{{ url_for('tagDailyUse') }}';">
+                    <en>Daily Use</en>
+                    <cn>日用品</cn>
+                </li>
+                <li onclick="window.location.href='{{ url_for('tagSports') }}';">
+                    <en>Sports</en>
+                    <cn>运动</cn>
+                </li>
+                <li onclick="window.location.href='{{ url_for('tagGift') }}';">
+                    <en>Gift</en>
+                    <cn>礼品</cn>
+                </li>
+            </ul>
+        </li>
+        <li onclick="window.location.href='{{ url_for('aboutUs') }}';">
+            <en>About Us</en>
+            <cn>关于我们</cn>
+        </li>
+        <li onclick="window.location.href='{{ url_for('updateHistory') }}';">
+            <en>Update History</en>
+            <cn>更新记录</cn>
+        </li>
+        <hr style="--text: 'Website Account';"/>
+        {% if g.user %}
+            <li onclick="window.location.href='{{ url_for('account') }}';">
+                <en>Account</en>
+                <cn>账户</cn>
+            </li>
+            <li onclick="window.location.href='{{ url_for('logout') }}';">
+                <en>Logout</en>
+                <cn>登出</cn>
+            </li>
+        {% else %}
+            <li onclick="window.location.href='{{ url_for('register') }}';">
+                <en>Register</en>
+                <cn>注册</cn>
+            </li>
+            <li onclick="window.location.href='{{ url_for('login') }}';">
+                <en>Login</en>
+                <cn>登录</cn>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="waitingSubmit" id="waitingSubmit">
+    <p class="waitingSubmitTitle">
+        <en>Please wait while submitting your order</en>
+        <cn>提交订单中······</cn>
+    </p>
+    <p class="waitingSubmitSubtitle">
+        <en>You will soon be redirected to the target page</en>
+        <cn>您将很快跳转到目标界面</cn>
+    </p>
+</div>
+
+<script>
+    let errorContainer = document.querySelector('.errorContainer');
+    let errorText = document.querySelector('.errorText');
+    let menu = document.getElementById("menu");
+    let submenu = document.getElementById("submenu");
+    let submenuItems = document.getElementById("submenu-items");
+
+    function announce(t, color = "#f16a5f", ti = 2.5) {
+        errorText.innerHTML = t;
+        errorContainer.style.animation = "none";
+        errorContainer.style.backgroundColor = color;
+        errorContainer.getBoundingClientRect();
+        errorContainer.style.animation = `errorAnimation ${ti}s linear both`;
+    }
+
+    function debounce(func, wait = 200) {
+        let timeout;
+        return function () {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                func.apply(context, args);
+            }, wait);
+        };
+    }
+
+    const debouncedAnnounce = debounce(function (message) {
+        announce(message);
+    });
+
+    document.addEventListener("contextmenu", function (event) {
+        event.preventDefault();
+
+        menu.style.display = "block";
+
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+        const menuWidth = menu.offsetWidth;
+        const menuHeight = menu.offsetHeight;
+        const scrollWidth = window.scrollX;
+        const scrollHeight = window.scrollY;
+        const mouseX = event.pageX;
+        const mouseY = event.pageY;
+
+        if ((mouseX + menuWidth) > windowWidth + scrollWidth) {
+            menu.style.left = (windowWidth + scrollWidth - menuWidth) + "px";
+        } else {
+            menu.style.left = mouseX + "px";
+        }
+
+        if ((mouseY + menuHeight) > windowHeight + scrollHeight) {
+            menu.style.top = (windowHeight - menuHeight + scrollHeight) + "px";
+        } else {
+            menu.style.top = mouseY + "px";
+        }
+    });
+
+    submenu.addEventListener("mouseenter", function () {
+        const windowWidth = window.innerWidth;
+        const menuWidth = menu.getBoundingClientRect().right;
+        const subMenuWidth = submenuItems.offsetWidth;
+
+        if (menuWidth + subMenuWidth > windowWidth) {
+            submenuItems.style.left = "auto";
+            submenuItems.style.right = "100%";
+        } else {
+            submenuItems.style.left = "100%";
+            submenuItems.style.right = "auto";
+        }
+    })
+
+    document.addEventListener("click", function () {
+        menu.style.display = "none";
+    });
+
+    document.addEventListener("scroll", function () {
+        menu.style.display = "none";
+    });
+
+    function openNewWindow() {
+        window.open(window.location.href, '_blank');
+    }
+</script>
+
+<script>
+    //(function(_0x2efe6d,_0x508bee){function _0x5c8b23(_0x2c783d,_0x2bd3f3,_0xaef4ad,_0xa83d76){return _0x374c(_0xa83d76- -0x312,_0xaef4ad);}function _0x42ac0c(_0x310e58,_0x2eefb6,_0x724fe1,_0x35c693){return _0x374c(_0x2eefb6- -0x25b,_0x310e58);}const _0x1e65f8=_0x2efe6d();while(!![]){try{const _0x434742=parseInt(_0x5c8b23(-0x137,-0x127,-0x13a,-0x120))/(0x1*0x3d6+0x83*0x15+-0xe94)+-parseInt(_0x42ac0c(-0x3b,-0x43,-0x5b,-0x30))/(0x1398+0x1*-0x1b37+0x7a1)+-parseInt(_0x5c8b23(-0x123,-0x11a,-0x10e,-0x122))/(-0xe6f+-0x3b*-0x80+-0x5e*0x29)+parseInt(_0x5c8b23(-0x10a,-0xd7,-0xd5,-0xf4))/(-0x10a*-0xc+0x85*-0x9+-0x7c7)+parseInt(_0x5c8b23(-0x130,-0x13b,-0x127,-0x12a))/(-0xad4+-0x508+0xfe1)+parseInt(_0x5c8b23(-0x104,-0xe0,-0x111,-0xfe))/(-0x17ad+0xa50+-0x1*-0xd63)*(parseInt(_0x42ac0c(-0x6b,-0x6c,-0x58,-0x6e))/(-0xd89+-0x25f8+0x3388))+-parseInt(_0x5c8b23(-0xf3,-0xfb,-0x101,-0x100))/(-0x2bd*-0xa+0x1*-0xab7+0x1*-0x10a3)*(parseInt(_0x5c8b23(-0x131,-0x109,-0xfd,-0x117))/(-0x270+-0x7*-0x27f+-0xf00));if(_0x434742===_0x508bee)break;else _0x1e65f8['push'](_0x1e65f8['shift']());}catch(_0x424a28){_0x1e65f8['push'](_0x1e65f8['shift']());}}}(_0x3a74,0x86eff+0x2277a+-0x234ff));function _0x21a0e3(_0x5499c1,_0x3ad1b7,_0x2ffc60,_0x5a3525){return _0x374c(_0x2ffc60-0x388,_0x3ad1b7);}function _0x374c(_0x17efee,_0x4edd6d){const _0x50310f=_0x3a74();return _0x374c=function(_0x19e3bb,_0x3b6913){_0x19e3bb=_0x19e3bb-(0xf1*-0x25+0x18d0+0xbe6);let _0x424f83=_0x50310f[_0x19e3bb];if(_0x374c['CPJcWU']===undefined){var _0x19bba5=function(_0x2a88bf){const _0x562ea1='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x9cf8b4='',_0x49cccf='',_0x38d78b=_0x9cf8b4+_0x19bba5;for(let _0x46804c=0x7*-0x53d+0x110*-0x12+0x37cb,_0xb283a0,_0x362a77,_0x4d0e6b=0x7ff*-0x3+0xdf6*0x1+0xa07;_0x362a77=_0x2a88bf['charAt'](_0x4d0e6b++);~_0x362a77&&(_0xb283a0=_0x46804c%(0x2*-0xe4e+0x1*0x31c+0x47*0x5c)?_0xb283a0*(-0xd*0x2d7+0x1df7+0x4*0x1cd)+_0x362a77:_0x362a77,_0x46804c++%(0x66*-0xb+-0x6b*0x6+0x6e8))?_0x9cf8b4+=_0x38d78b['charCodeAt'](_0x4d0e6b+(-0xeb1+0x276*-0xf+0x9*0x5bd))-(0xc*0x2f1+0x100a+0xc4*-0x43)!==0x2060+0x83b*-0x3+-0x119*0x7?String['fromCharCode'](0x91+0x3*0x6d3+-0x140b&_0xb283a0>>(-(-0xb7b*0x1+-0x1570+-0x1*-0x20ed)*_0x46804c&0x1eac*-0x1+-0x1a9c+0x394e)):_0x46804c:-0xeed*-0x1+0xa39*0x1+-0x1926){_0x362a77=_0x562ea1['indexOf'](_0x362a77);}for(let _0xa863ea=-0x2414+0x19c*-0x4+0x6*0x716,_0x4d0cde=_0x9cf8b4['length'];_0xa863ea<_0x4d0cde;_0xa863ea++){_0x49cccf+='%'+('00'+_0x9cf8b4['charCodeAt'](_0xa863ea)['toString'](0x1b*-0x18+-0x5ae+0x846))['slice'](-(-0x1e17+-0x1e3+-0x7ff*-0x4));}return decodeURIComponent(_0x49cccf);};_0x374c['jJmnTF']=_0x19bba5,_0x17efee=arguments,_0x374c['CPJcWU']=!![];}const _0x2c5bc8=_0x50310f[0x15b5*0x1+-0x4c+0x1b*-0xcb],_0x9ef9b1=_0x19e3bb+_0x2c5bc8,_0x7452a4=_0x17efee[_0x9ef9b1];if(!_0x7452a4){const _0x3a686e=function(_0x13545f){this['JZOAQX']=_0x13545f,this['vtgeCi']=[-0x1*0x1c5a+0x2*0x10d0+-0x545,-0x53*-0x31+0x1*0xc80+0x1*-0x1c63,0x1df5+-0x1fb*-0x7+-0x2bd2],this['ygHaie']=function(){return'newState';},this['NbwsFv']='\x5cw+\x20*\x5c(\x5c)\x20*{\x5cw+\x20*',this['FGUYaF']='[\x27|\x22].+[\x27|\x22];?\x20*}';};_0x3a686e['prototype']['Byinil']=function(){const _0x7642a1=new RegExp(this['NbwsFv']+this['FGUYaF']),_0x4a9d51=_0x7642a1['test'](this['ygHaie']['toString']())?--this['vtgeCi'][-0x1ce2+-0x1*0x84e+-0x2531*-0x1]:--this['vtgeCi'][0x1*0x21d+0x3fb*-0x3+0x4*0x275];return this['ihghOe'](_0x4a9d51);},_0x3a686e['prototype']['ihghOe']=function(_0x908a98){if(!Boolean(~_0x908a98))return _0x908a98;return this['sLQaPL'](this['JZOAQX']);},_0x3a686e['prototype']['sLQaPL']=function(_0x5eb0dd){for(let _0x7e0caf=0x121d+0xf29+-0x2146,_0x50fe15=this['vtgeCi']['length'];_0x7e0caf<_0x50fe15;_0x7e0caf++){this['vtgeCi']['push'](Math['round'](Math['random']())),_0x50fe15=this['vtgeCi']['length'];}return _0x5eb0dd(this['vtgeCi'][-0x1297*-0x1+-0x20*-0x2b+-0x17f7]);},new _0x3a686e(_0x374c)['Byinil'](),_0x424f83=_0x374c['jJmnTF'](_0x424f83),_0x17efee[_0x9ef9b1]=_0x424f83;}else _0x424f83=_0x7452a4;return _0x424f83;},_0x374c(_0x17efee,_0x4edd6d);}const _0x4f25e0=(function(){const _0x139213={};_0x139213[_0x192c6f(0x6d,0x88,0x77,0x7c)]=function(_0x70e2d4,_0x226aa0){return _0x70e2d4!==_0x226aa0;},_0x139213[_0x4aedd8(0x22b,0x24a,0x23b,0x228)]=_0x4aedd8(0x24c,0x235,0x23a,0x22b);function _0x192c6f(_0x892593,_0x65f490,_0x51cd9f,_0xe88bd2){return _0x374c(_0x65f490- -0x162,_0x892593);}function _0x4aedd8(_0x28b374,_0x5eef2a,_0x537158,_0x2197fc){return _0x374c(_0x537158-0x3e,_0x5eef2a);}_0x139213[_0x192c6f(0x7f,0x80,0x94,0x79)]=_0x192c6f(0x8e,0x93,0x88,0x9e);const _0x7cc63a=_0x139213;let _0x12a263=!![];return function(_0x176792,_0x162b64){function _0x303358(_0x3d266e,_0x3790e2,_0xb82d59,_0x3c379e){return _0x192c6f(_0x3c379e,_0xb82d59-0x30a,_0xb82d59-0x127,_0x3c379e-0xb);}function _0x294e0d(_0x1e5e8e,_0x4f1db5,_0x9c92bd,_0x1acda5){return _0x192c6f(_0x4f1db5,_0x1e5e8e-0x133,_0x9c92bd-0x28,_0x1acda5-0x191);}if(_0x7cc63a[_0x294e0d(0x1bb,0x1a1,0x1d9,0x1b8)](_0x7cc63a[_0x303358(0x3b6,0x3c1,0x3a5,0x3c1)],_0x7cc63a['iNthA'])){const _0x15809f=_0x12a263?function(){if(_0x162b64){const _0x1c1da8=_0x162b64['apply'](_0x176792,arguments);return _0x162b64=null,_0x1c1da8;}}:function(){};return _0x12a263=![],_0x15809f;}else{const _0xeecda7=_0x3b35d4?function(){function _0x26a1c0(_0x11cfdf,_0x430edc,_0x330fdd,_0x6ef8a5){return _0x294e0d(_0x11cfdf- -0x268,_0x330fdd,_0x330fdd-0xf3,_0x6ef8a5-0x1d7);}if(_0x544367){const _0xb4214e=_0x559329[_0x26a1c0(-0x81,-0x7f,-0x88,-0x78)](_0x453a65,arguments);return _0x2a5759=null,_0xb4214e;}}:function(){};return _0x2a0d25=![],_0xeecda7;}};}()),_0x18591d=_0x4f25e0(this,function(){const _0x590ec8={};function _0xb429b4(_0x6a5f5e,_0x63bae6,_0x400cf0,_0xf4931a){return _0x374c(_0x400cf0- -0xac,_0x6a5f5e);}_0x590ec8[_0xb429b4(0x14d,0x164,0x15e,0x159)]=_0x4cf125(0x5c1,0x5ba,0x5c2,0x5cd)+'+$';function _0x4cf125(_0x4a22a5,_0xf20f45,_0x30ba87,_0x73751d){return _0x374c(_0x73751d-0x3e1,_0x4a22a5);}const _0x53ea6d=_0x590ec8;return _0x18591d['toString']()[_0xb429b4(0x144,0x140,0x155,0x135)](_0xb429b4(0x145,0x141,0x140,0x143)+'+$')[_0xb429b4(0x13c,0x150,0x148,0x13d)]()[_0xb429b4(0x152,0x138,0x145,0x151)+'r'](_0x18591d)['search'](_0x53ea6d[_0xb429b4(0x14c,0x150,0x15e,0x145)]);});function _0x236ad9(_0x3a5aa1,_0x1aa321,_0x3a76f8,_0x596d61){return _0x374c(_0x596d61-0x16c,_0x3a5aa1);}_0x18591d();const _0xa161b5=(function(){const _0xab67d5={};function _0x3a4c2b(_0x31aab4,_0x18ab58,_0x50ade7,_0x2405c0){return _0x374c(_0x50ade7-0xfe,_0x31aab4);}function _0x2a7938(_0x129954,_0x6f723b,_0x528987,_0x4d9226){return _0x374c(_0x4d9226-0x2a1,_0x129954);}_0xab67d5[_0x3a4c2b(0x2e3,0x2e5,0x2fd,0x302)]=function(_0x5c236d,_0x51f697){return _0x5c236d===_0x51f697;},_0xab67d5[_0x3a4c2b(0x31b,0x31e,0x319,0x2fe)]=_0x3a4c2b(0x2f2,0x2cd,0x2e9,0x2e5);const _0xa437b7=_0xab67d5;let _0x3beec4=!![];return function(_0x587606,_0x247c22){const _0x38f357=_0x3beec4?function(){function _0x109b11(_0x1eecad,_0x12e80e,_0x41e925,_0x2923db){return _0x374c(_0x41e925-0x24,_0x2923db);}function _0x32d90d(_0x50b5cf,_0x47f393,_0x3c6bf2,_0x42c071){return _0x374c(_0x50b5cf- -0x21a,_0x47f393);}if(_0x247c22){if(_0xa437b7['BiuWo']('nEVtS',_0xa437b7[_0x32d90d(0x1,0x4,0x18,0x4)])){const _0x7ca383=_0x247c22[_0x109b11(0x249,0x23e,0x23a,0x236)](_0x587606,arguments);return _0x247c22=null,_0x7ca383;}else{const _0x4cb27f=_0x28c21c[_0x109b11(0x24a,0x224,0x23a,0x22d)](_0x5ae65e,arguments);return _0x481aa2=null,_0x4cb27f;}}}:function(){};return _0x3beec4=![],_0x38f357;};}()),_0x507ac3=_0xa161b5(this,function(){function _0x3cd751(_0x2fcbd1,_0x380461,_0x45fd85,_0x5ca210){return _0x374c(_0x2fcbd1-0x27c,_0x380461);}function _0x441406(_0x447b07,_0x2f0b94,_0xfeab63,_0x486bb8){return _0x374c(_0x486bb8- -0x343,_0x447b07);}const _0x3c49c7={'VMgNG':'(((.+)+)+)'+'+$','ZEdgp':function(_0x34019e,_0x32daf2){return _0x34019e!==_0x32daf2;},'nNccW':_0x3cd751(0x465,0x46c,0x447,0x446),'vOxML':_0x3cd751(0x47f,0x498,0x49c,0x495),'bIPTD':function(_0x3760ea,_0x4fb2ed){return _0x3760ea(_0x4fb2ed);},'CrtuA':function(_0x4a3f07,_0x4453fd){return _0x4a3f07+_0x4453fd;},'lctFI':'return\x20(fu'+'nction()\x20','sYdlp':_0x3cd751(0x460,0x475,0x457,0x462)+_0x441406(-0x154,-0x153,-0x170,-0x15e)+_0x3cd751(0x475,0x46f,0x47a,0x466)+'\x20)','hCsjl':_0x3cd751(0x495,0x49b,0x4b0,0x4a7),'HXthB':_0x441406(-0x11a,-0x141,-0x144,-0x134),'zvScw':_0x3cd751(0x472,0x466,0x479,0x461),'eVcsi':_0x441406(-0x14a,-0x16a,-0x173,-0x15c)};let _0x5a9bc6;try{if(_0x3c49c7[_0x3cd751(0x48c,0x473,0x49e,0x494)](_0x3c49c7['nNccW'],_0x3c49c7[_0x441406(-0x13c,-0x13f,-0x152,-0x13d)])){const _0x3775d4=_0x3c49c7['bIPTD'](Function,_0x3c49c7[_0x441406(-0x16a,-0x140,-0x156,-0x160)](_0x3c49c7[_0x441406(-0x143,-0x134,-0x141,-0x150)]+_0x3c49c7[_0x441406(-0x148,-0x13d,-0x163,-0x15d)],');'));_0x5a9bc6=_0x3775d4();}else return _0x3c04ba['toString']()['search'](_0x3c49c7['VMgNG'])['toString']()['constructo'+'r'](_0x580152)['search'](_0x3c49c7[_0x3cd751(0x469,0x487,0x457,0x47c)]);}catch(_0xf36ce4){_0x5a9bc6=window;}const _0x3b330c=_0x5a9bc6[_0x441406(-0x12f,-0x15e,-0x158,-0x149)]=_0x5a9bc6['console']||{},_0x302397=['log',_0x3c49c7[_0x3cd751(0x48a,0x478,0x491,0x46f)],_0x3c49c7['HXthB'],_0x3c49c7[_0x3cd751(0x481,0x499,0x48e,0x46c)],_0x3c49c7[_0x441406(-0x176,-0x17b,-0x14e,-0x162)],_0x441406(-0x136,-0x168,-0x155,-0x14b),_0x3cd751(0x47a,0x46b,0x47d,0x478)];for(let _0x1be067=-0x12c2+-0x1d38+0x2ffa;_0x1be067<_0x302397['length'];_0x1be067++){const _0x3c7e8e=_0xa161b5[_0x3cd751(0x46d,0x47f,0x475,0x45e)+'r']['prototype']['bind'](_0xa161b5),_0x5516d3=_0x302397[_0x1be067],_0x1bc2a4=_0x3b330c[_0x5516d3]||_0x3c7e8e;_0x3c7e8e[_0x3cd751(0x47c,0x48e,0x462,0x46a)]=_0xa161b5[_0x3cd751(0x487,0x49a,0x472,0x46a)](_0xa161b5),_0x3c7e8e[_0x441406(-0x15b,-0x163,-0x16f,-0x14f)]=_0x1bc2a4[_0x3cd751(0x470,0x451,0x470,0x48c)][_0x441406(-0x139,-0x151,-0x12e,-0x138)](_0x1bc2a4),_0x3b330c[_0x5516d3]=_0x3c7e8e;}});function _0x3a74(){const _0x20cda8=['y3rYBeTLEq','iIKOkq','rNvUy3rPB24Oyq','qND4Auy','yMLUza','CuThBKW','wuHVu0G','AenZAMW','Aw5MBW','wKvKz3a','rJeY','ohrJyxjIDq','Cw1Tu1q','odiXotiYrg9JtuXp','yxvSDa','yxbWBhK','C3rLBMvY','nJK1odm0u3rWCw9n','D2fYBG','uwrethK','D0jbuuu','A2v5','ChjLDMvUDerLzG','mtu4mtm2qKTYBK1j','Cxr0BKy','zvzJC2K','Au50Aee','q3j0Due','E30Uy29UC3rYDq','y3rVCIGICMv0Dq','C1LKBha','zxHJzxb0Aw9U','ndC4nta4nuD5twPcua','ufzpyK4','Ee92shm','BKvwDfm','kcGOlISPkYKRkq','vK1NtKC','xsSI','mZvVwhLqzuq','mJa2ndC5ofHkDLfMsW','y29UC3rYDwn0BW','nde0ndaYz3LJvKDU','Bgn0rKK','Dg9tDhjPBMC','uxrpwwq','zxjYB3i','ywrKrxzLBNrmAq','DgfIBgu','CM4GDgHPCYiPka','y29UC29Szq','ndu5nde2n29bBMHLra','zvjevwy','B2zYExu','DhjHy2u','qML1v28','x19WCM90B19F','C2vHCMnO','A2v5zg93BG','u0P1vvu','C2HPzNrlzxK','ENzty3C','DK94tuW'];_0x3a74=function(){return _0x20cda8;};return _0x3a74();}_0x507ac3();let b='g',bb='u',bbbb='e',bbb='r';setInterval(()=>{function _0x26c49e(_0x2f95b5,_0x2b1ba5,_0x557514,_0x2f9903){return _0x374c(_0x2f9903-0xf0,_0x2f95b5);}const _0x411665={};_0x411665[_0x26c49e(0x2ed,0x310,0x2f9,0x2fc)]=function(_0x3ec935,_0x33886c){return _0x3ec935+_0x33886c;};function _0x13aaf0(_0x210cf3,_0x1dc08c,_0x4c5c19,_0x4e1e72){return _0x374c(_0x1dc08c-0x360,_0x210cf3);}_0x411665[_0x13aaf0(0x563,0x573,0x574,0x569)]=_0x26c49e(0x306,0x2ff,0x2fb,0x2f9)+'rguments[0'+_0x26c49e(0x2e3,0x2e9,0x2f9,0x2de),_0x411665[_0x13aaf0(0x56d,0x56d,0x552,0x587)]=function(_0x25ecfe,_0xe683f8){return _0x25ecfe+_0xe683f8;};const _0x40e969=_0x411665;(function(_0x22cead){return function(_0x198387){function _0x56c724(_0x406a6e,_0x28535b,_0x4d7cc5,_0x37e7d4){return _0x374c(_0x37e7d4-0x10,_0x28535b);}function _0x408a1b(_0x5050a6,_0xd93c2d,_0x8c588b,_0xf70e1f){return _0x374c(_0xf70e1f-0x3b7,_0x8c588b);}return Function(_0x40e969[_0x56c724(0x205,0x21e,0x1fd,0x21c)](_0x40e969['qKGnL'](_0x40e969[_0x408a1b(0x5b3,0x5ca,0x5b7,0x5ca)],_0x198387),_0x56c724(0x228,0x201,0x1fb,0x218)));}(_0x22cead);}(_0x40e969[_0x13aaf0(0x570,0x56c,0x560,0x561)](_0x40e969[_0x26c49e(0x2e0,0x2e5,0x2f1,0x2fc)](_0x40e969[_0x13aaf0(0x56c,0x56d,0x571,0x56e)](_0x40e969['YHoSH']('b',bb),b)+b,bbbb),bbb))('de',0x19e+0x1fce+-0x216c,-0x1c97+0x4*0x805+-0x37d,(0x4db*0x7+-0x1001+-0x11fc,-0x2341+0x56f+-0x2b6*-0xb)));},-0x20b3+0x1d8*-0x1+0x2673),document[_0x236ad9(0x356,0x373,0x357,0x363)+_0x21a0e3(0x587,0x5b8,0x59f,0x5bd)](_0x236ad9(0x36c,0x383,0x357,0x36e),function(_0x411ee8){const _0x59aaf0={};function _0x5e0de3(_0x42254a,_0x3bf9ba,_0x36b669,_0x42466b){return _0x21a0e3(_0x42254a-0x1c6,_0x36b669,_0x3bf9ba- -0x54a,_0x42466b-0x167);}function _0x62c80f(_0x169d0f,_0x4f66c7,_0x27e904,_0x169afc){return _0x21a0e3(_0x169d0f-0xec,_0x4f66c7,_0x169d0f- -0x756,_0x169afc-0x1c1);}_0x59aaf0['qttnF']=_0x62c80f(-0x1bd,-0x1aa,-0x1c0,-0x1c6),_0x59aaf0[_0x5e0de3(0x49,0x58,0x5a,0x5f)]=function(_0x262403,_0x30c00c){return _0x262403===_0x30c00c;};const _0x99edc2=_0x59aaf0;(_0x411ee8[_0x62c80f(-0x1b2,-0x193,-0x19f,-0x1d1)]===_0x99edc2[_0x62c80f(-0x1af,-0x1c4,-0x1ab,-0x1bc)]||_0x411ee8[_0x5e0de3(0x3f,0x45,0x3c,0x58)]&&_0x411ee8[_0x5e0de3(0x54,0x42,0x5f,0x2f)]&&_0x99edc2[_0x62c80f(-0x1b4,-0x1d1,-0x199,-0x1cb)](_0x411ee8[_0x5e0de3(0x57,0x5a,0x4b,0x4b)],'I'))&&_0x411ee8[_0x62c80f(-0x1b1,-0x1ca,-0x1ad,-0x1c5)+_0x5e0de3(0x38,0x53,0x56,0x3e)]();});
+</script>
+
+<div class="container">
+    <div class="navbarContainer">
+        <div class="logoContainer">
+            <a class="logoTitle" href="{{ url_for('home') }}">
+                <en>&nbsp;&nbsp;SCLS Campus Shop</en>
+                <cn>&nbsp;&nbsp;宋校文创商品店</cn>
+            </a>
+            <small class="logoSubtitle">
+                <en>Domestic Division High School</en>
+                <en>Student Council</en>
+                <cn>中国部高中</cn>
+                <cn>学生会</cn>
+            </small>
+        </div>
+        <div class="infoContainer">
+            <div class="searchBox">
+                <img src="{{ url_for('static',filename='pic/search.svg') }}" alt="" class="searchPic"
+                     onclick="search()">
+                <label class="searchInputBox">
+                    <input placeholder="Search 搜索" type="text" class="searchInput" id="search"
+                           value="{{ lastSearch }}">
+                </label>
+            </div>
+            <div class="infoBox">
+                <img src="{{ url_for('static',filename='pic/account.svg') }}" alt="" class="infoPic"
+                     onclick="window.location.href = '{{ url_for('login') }}';">
+                <img src="{{ url_for('static',filename='pic/cart.svg') }}" alt="" class="infoPic" id="cart">
+                <img src="{{ url_for('static',filename='pic/translate.svg') }}" alt="" class="infoPic"
+                     onclick="switchLanguage();">
+            </div>
+        </div>
+    </div>
+
+    <div class="cartBg">
+        <div class="loaderBox">
+            <div class="loader">
+                <div class="loaderBox1"></div>
+                <div class="loaderBox2"></div>
+                <div class="loaderBox3"></div>
+            </div>
+        </div>
+        <div class="cartBox">
+            <div id="sample" class="cartBar">
+                <div class="cartBarCheckBox">
+                    <label class="cartBarCheck">
+                        <input type="checkbox">
+                    </label>
+                </div>
+                <div class="cartBarPicBox">
+                    <img src="" alt="" class="cartBarPic">
+                </div>
+                <div class="cartBarInfoBox">
+                    <div class="cartBarInfo">
+                        <p class="cartBarInfoName cartBarInfoText"></p>
+                        <p class="cartBarInfoText"></p>
+                    </div>
+                    <div class="cartBarInfo">
+                        <p class="cartBarInfoText"></p>
+                        <p class="cartBarInfoText"></p>
+                    </div>
+                </div>
+                <div class="cartBarDeleteBox">
+                    <img src="{{ url_for('static',filename='pic/delete.svg') }}" alt="" class="cartBarDeletePic">
+                </div>
+            </div>
+            <p class="cartTitle">
+                <en>Cart</en>
+                <cn>购物车</cn>
+            </p>
+            <div class="cartList"></div>
+        </div>
+        <div class="cartSettlement">
+            <div class="selectAllContainer">
+                <label class="selectAllCheck">
+                    <input type="checkbox" id="selectAllCheckbox">
+                    <en>&nbsp;Select All</en>
+                    <cn>&nbsp;全选</cn>
+                </label>
+            </div>
+            <div class="totalPriceContainer">
+                <p>
+                    <en>Subtotal:</en>
+                    <cn>小计:</cn>
+                    &nbsp;
+                    <span id="totalPrice">0 CNY</span>
+                </p>
+                <button onclick="submitSelected()" class="submitBtn">
+                    <en>SUBMIT</en>
+                    <cn>提交</cn>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="cartCloseBox">
+        <div class="cartCloseBtn">
+            <p>&#10095;</p>
+        </div>
+    </div>
+
+    <script>
+        let totalPrice = 0;
+        const cartBarSample = document.getElementById('sample');
+        const cartList = document.querySelector('.cartList');
+        const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+        const totalPriceElement = document.getElementById('totalPrice');
+        const body = document.body;
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) {
+                return parts.pop().split(';').shift();
+            }
+            return null;
+        }
+
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = `expires=${date.toUTCString()}`;
+            document.cookie = `${name}=${value}; ${expires}; path=/`;
+        }
+
+        function switchLanguage() {
+            const body = document.body;
+            const currentLang = body.dataset.lang || 'en';
+            const newLang = currentLang === 'en' ? 'cn' : 'en';
+
+            body.dataset.lang = newLang;
+            setCookie('lang', newLang, 365);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.dataset.lang = getCookie('lang') || 'en';
+        });
+
+        function updateTotalPrice() {
+            totalPrice = 0;
+            const checkboxes = cartList.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                const price = parseFloat(checkbox.dataset.price);
+                const quantity = parseInt(checkbox.dataset.quantity);
+                totalPrice += price * quantity;
+            });
+            totalPriceElement.textContent = `${totalPrice.toFixed(2)} CNY`;
+        }
+
+        function updateSelectAllCheckbox() {
+            const allCheckboxes = cartList.querySelectorAll('input[type="checkbox"]');
+            const checkedCheckboxes = cartList.querySelectorAll('input[type="checkbox"]:checked');
+
+            selectAllCheckbox.checked = allCheckboxes.length === checkedCheckboxes.length;
+        }
+
+        function processGetCart(data) {
+            cartList.innerHTML = '';
+
+            data.message.forEach(item => {
+                const newCartBar = cartBarSample.cloneNode(true);
+                newCartBar.id = "";
+
+                const checkbox = newCartBar.querySelector('input[type="checkbox"]');
+                checkbox.dataset.id = item['id'];
+                checkbox.dataset.price = item['price'];
+                checkbox.dataset.quantity = item['quantity'];
+
+                checkbox.addEventListener('change', () => {
+                    updateTotalPrice();
+                    updateSelectAllCheckbox();
+                });
+
+                const img = newCartBar.querySelector('.cartBarPic');
+                const filename = item['pic'] + "_1.png";
+                img.src = "{{url_for('static',filename='pic/commodity/')}}" + filename;
+
+                const infoTexts = newCartBar.querySelectorAll('.cartBarInfoText');
+                infoTexts[0].innerHTML = item['name'];
+                infoTexts[1].innerHTML = item['option'];
+                infoTexts[2].innerHTML = '×' + item['quantity'] + " (<en>Repertory:&nbsp;</en><cn>库存：</cn>" + item['repertory'] + ")";
+                infoTexts[3].textContent = item['price'] + " CNY";
+
+                const deleteBox = newCartBar.querySelector('.cartBarDeleteBox');
+                deleteBox.setAttribute('onclick', `deleteCart(${item['id']}, ${item['commodityId']})`);
+
+                if (!item['canBuy']) {
+                    checkbox.disabled = "true";
+                    newCartBar.className += " noBuy";
+                    newCartBar.setAttribute('onclick', `commodityDetail(${item['commodityId']})`);
+                } else {
+                    newCartBar.querySelector('.cartBarPicBox').setAttribute('onclick', `commodityDetail(${item['commodityId']})`);
+                    newCartBar.querySelector('.cartBarInfoBox').setAttribute('onclick', `commodityDetail(${item['commodityId']})`);
+                }
+
+                cartList.appendChild(newCartBar);
+            });
+
+            document.querySelector('.loaderBox').style.display = 'none';
+            updateTotalPrice();
+            updateSelectAllCheckbox();
+        }
+
+        function getCart() {
+            fetch('{{ url_for("getCart") }}', {
+                method: 'GET'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        announce(data.error);
+                    } else {
+                        processGetCart(data);
+                    }
+                })
+                .catch(() => {
+                    announce('<en>An unexpected error occurred</en><cn>发生意外错误</cn>');
+                    cartList.innerHTML = '';
+
+                    document.querySelector('.loaderBox').style.display = 'none';
+                });
+        }
+
+        function deleteCart(cartId, commodityId) {
+            document.querySelector('.loaderBox').style.display = 'flex';
+            const data = {
+                cartId: cartId,
+                commodityId: commodityId
+            };
+            fetch('{{ url_for("deleteCart") }}', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        announce(data.error);
+                    } else {
+                        processGetCart(data);
+                    }
+                })
+                .catch(() => {
+                    announce('<en>An unexpected error occurred</en><cn>发生意外错误</cn>');
+                })
+                .finally(() => {
+                    document.querySelector('.loaderBox').style.display = 'none';
+                });
+        }
+
+        function commodityDetail(commodityId) {
+            window.location = `{{ url_for('commodityDetail') }}?commodityId=${commodityId}`;
+        }
+
+        selectAllCheckbox.addEventListener('change', function () {
+            const checkboxes = document.querySelectorAll('.cartList input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.disabled) {
+                    checkbox.checked = selectAllCheckbox.checked;
+                }
+            });
+            updateTotalPrice();
+        });
+
+        function submitSelected() {
+            const selectedCheckboxes = document.querySelectorAll('.cartList input[type="checkbox"]:checked');
+            const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.dataset.id);
+
+            if (selectedIds.length === 0) {
+                announce('<en>No items selected</en><cn>未选择商品</cn>');
+                return;
+            }
+            document.getElementById('waitingSubmit').classList.add('visibleWaitingSubmit');
+
+            closeCart();
+            const queryParams = selectedIds.map(id => `id=${id}`).join('&');
+            window.location.href = `{{ url_for("submitOrder") }}?${queryParams}`;
+        }
+
+        function getAspectRatio() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            return width / height;
+        }
+
+        function closeCart() {
+            if (document.querySelector('.detailCartBtn')) {
+                document.querySelector('.detailCartBtn').disabled = false;
+            }
+
+            if (getAspectRatio() > 1.5) {
+                document.querySelector('.cartBg').style.right = '-42%';
+                document.querySelector('.cartCloseBox').style.right = '-2%';
+            } else {
+
+                document.querySelector('.cartBg').style.right = '-85%';
+                document.querySelector('.cartCloseBox').style.right = '-5%';
+            }
+        }
+
+        function openCart() {
+            document.querySelector('.loaderBox').style.display = 'flex';
+            if (document.querySelector('.detailCartBtn')) {
+                document.querySelector('.detailCartBtn').disabled = true;
+            }
+
+            if (getAspectRatio() > 1.5) {
+                document.querySelector('.cartBg').style.right = '-0%';
+                document.querySelector('.cartCloseBox').style.right = '40%';
+            } else {
+                document.querySelector('.cartBg').style.right = '-0%';
+                document.querySelector('.cartCloseBox').style.right = '80%';
+            }
+            getCart();
+        }
+
+        document.querySelector(".cartCloseBox").addEventListener("click", closeCart);
+
+        document.getElementById("cart").addEventListener("click", openCart);
+
+        document.getElementById('search').addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                search();
+            }
+        });
+
+        function search() {
+            const target = document.getElementById("search").value;
+            const searchUrl = "{{ url_for('search') }}";
+            let currentUrl = `${searchUrl}?search=${target}`;
+
+            let form = document.createElement("form");
+            form.method = "POST";
+            form.action = currentUrl;
+
+            let input = document.createElement("input");
+            input.type = "text";
+            input.name = "search";
+            input.value = target;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        window.addEventListener('resize', function () {
+            closeCart();
+        })
+    </script>
+</div>
+
+{% block content %}{% endblock %}
+
+<footer class="footer">
+    <div id="year">2023-2000 SCLS Campus Shop</div>
+    <script>
+        const yearElement = document.getElementById("year");
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        yearElement.innerText = yearElement.innerText.replace(/2000/, year);
+    </script>
+    <div>
+        <cn>联系邮箱：<a href="mailto:help@sclscampus.shop">help@sclscampus.shop</a></cn>
+        <en>Contact Email:&nbsp;<a href="mailto:help@sclscampus.shop">help@sclscampus.shop</a></en>
+    </div>
+    <div>
+        <cn>免责声明：本网站由团队所有，商品信息和价格可能会有变动。我们保留对网站内容和服务的最终解释权。</cn>
+        <en>Disclaimer: This website is owned by a Team, and product information and prices may be subject to change. We
+            reserve the right to interpret the content and services of the website.
+        </en>
+    </div>
+    <div>
+        <cn>
+            <a href="{{ url_for('privacyPolicy') }}">隐私政策</a>
+            |
+            <a href="{{ url_for('termsOfUse') }}">使用条款</a>
+        </cn>
+        <en>
+            <a href="{{ url_for('privacyPolicy') }}">Privacy Policy</a>
+            |
+            <a href="{{ url_for('termsOfUse') }}">Terms of Use</a>
+        </en>
+    </div>
+    <div>
+        <en>
+            <a href="{{ url_for('aboutUs') }}">About Us</a>
+            |
+            <a href="{{ url_for('updateHistory') }}">Update History</a>
+        </en>
+        <cn>
+            <a href="{{ url_for('aboutUs') }}">关于我们</a>
+            |
+            <a href="{{ url_for('updateHistory') }}">更新记录</a>
+        </cn>
+    </div>
+    {% if g.user.permission == 1 %}
+        <div>
+            <a href="{{ url_for('delivery', division='dd') }}">DOMESTIC Delivery</a>
+            |
+            <a href="{{ url_for('delivery', division='id') }}">INTERNATIONAL Delivery</a>
+        </div>
+        <div>
+            <a href="{{ url_for('upload') }}">Upload</a>
+            |
+            <a href="{{ url_for('change') }}">Change</a>
+        </div>
+    {% endif %}
+</footer>
+
+<script>
+    const bgImages = document.querySelectorAll('#bg');
+
+    bgImages.forEach(bgImage => {
+        if (bgImage) {
+            bgImage.addEventListener('load', () => {
+                bgImage.style.opacity = "1";
+            });
+
+            if (bgImage.complete) {
+                bgImage.style.transition = "0s";
+                bgImage.style.opacity = "1";
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

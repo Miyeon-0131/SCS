@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/subNavbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/commodity.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="subNavbarContainer">
+        <div class="subNavbarLeftBox">
+            <a class="subNavbarTitle" id="Apparel" href="{{ url_for('tagApparel') }}">
+                <en>Apparel</en>
+                <cn>服饰</cn>
+            </a>
+            <a class="subNavbarTitle" id="Stationery" href="{{ url_for('tagStationery') }}">
+                <en>Stationery</en>
+                <cn>文具</cn>
+            </a>
+            <a class="subNavbarTitle" id="DailyUse" href="{{ url_for('tagDailyUse') }}">
+                <en>Daily Use</en>
+                <cn>日用品</cn>
+            </a>
+            <a class="subNavbarTitle" id="Sports" href="{{ url_for('tagSports') }}">
+                <en>Sports</en>
+                <cn>运动</cn>
+            </a>
+            <a class="subNavbarTitle" id="Gift" href="{{ url_for('tagGift') }}">
+                <en>Gift</en>
+                <cn>礼品</cn>
+            </a>
+            <a class="subNavbarTitle" id="About" href="{{ url_for('aboutUs') }}">
+                <en>About Us</en>
+                <cn>关于我们</cn>
+            </a>
+        </div>
+        <div class="subNavbarRightBox">
+            <a class="subNavbarTitle" onclick="history.back();">
+                <en>Back</en>
+                <cn>返回</cn>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const tagElement = document.getElementById("{{ title }}");
+        if (tagElement) {
+            tagElement.style.textDecoration = "underline 2px solid #174d3d";
+        }
+    </script>
+
+    <div class="commodityFrame">
+        <div class="commodityContainer">
+            {% for target in commodity %}
+                <div class="commodityBox"
+                     onclick="window.location='{{ url_for("commodityDetail", commodityId=target.id) }}';">
+                    <div class="commodityPicBox">
+                        <img src="{{ url_for('static', filename='pic/commodity/'~target.pic~'_1S.png') }}" alt=""
+                             class="commodityPicS" id="bg">
+                        <img src="{{ url_for('static', filename='pic/commodity/'~target.pic~'_1.png') }}" alt=""
+                             class="commodityPic" id="bg" loading="lazy">
+                    </div>
+                    <div class="commodityInfoBox">
+                        <p class="commodityInfo">
+                            {{ target.name|safe }}
+                            <span class="commodityInfoInnerBox" id="labelBox">
+                                <label style="--color:#e7b852">
+                                    <en>{{ target.tag|safe|capitalize }}</en>
+                                    <cn>{{ target.tag|safe|capitalize }}</cn>
+                                </label>
+                                {% if target.label %}
+                                    <label style="--color:#f16a5f">{{ target.label|safe }}</label>
+                                {% endif %}
+                            </span>
+                            <span class="commodityInfoInnerBox">
+                                {{ target.price }}&nbsp;CNY
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if commodity==[] %}
+            <p class="commodityTitle">
+                <en>No Commodity Found</en>
+                <cn>未找到商品</cn>
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

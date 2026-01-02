@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+    SuccessReservation
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/successReservation.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="srBox">
+        <p class="srTitle">
+            <en>Thanks for your support!</en>
+            <cn>感谢您的支持！</cn>
+        </p>
+        <img src="{{ url_for('static', filename="pic/logoWhite.svg") }}" alt="" class="srPic">
+        <p class="srTitle">
+            <en>Your reservation is completed.</en>
+            <cn>您的预定已经完成</cn>
+        </p>
+        <a href="{{ url_for('account') }}" class="srBtn">
+            <en>Back</en>
+            <cn>返回</cn>
+        </a>
+    </div>
+{% endblock %}
